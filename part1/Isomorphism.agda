@@ -161,5 +161,64 @@ to∘from (≲-antisym A≲B B≲A to≡from from≡to) = \y ->
     y
   ∎
 
--- to be continued: Equational reasoning for embedding
+module ≲-Reasoning where
 
+  infix  1 ≲-begin_
+  infixr 2 _≲⟨_⟩_
+  infix  3 _≲-∎
+
+  ≲-begin_ : ∀ {A B : Set} →
+    A ≲ B                  →
+    -----
+    A ≲ B
+  ≲-begin A≲B = A≲B
+
+  _≲⟨_⟩_ : ∀ (A : Set) {B C : Set} →
+    A ≲ B                          →
+    B ≲ C                          →
+    -----
+    A ≲ C
+  A ≲⟨ A≲B ⟩ B≲C = ≲-trans A≲B B≲C
+
+  _≲-∎ : ∀ (A : Set) →
+    -----
+    A ≲ A
+  A ≲-∎ = ≲-refl
+
+open ≲-Reasoning
+
+≃-implies-≲ : ∀ {A B : Set} →
+  A ≃ B                     →
+  -----
+  A ≲ B
+to (≃-implies-≲ A≃B) = to A≃B
+from (≃-implies-≲ A≃B) = from A≃B
+from∘to (≃-implies-≲ A≃B) = from∘to A≃B
+
+record _⇔_ (A B : Set) : Set where
+  field
+    to   : A → B
+    from : B → A
+
+open _⇔_
+
+⇔-refl : ∀ {A : Set} →
+  -----
+  A ⇔ A
+to   ⇔-refl = \x -> x
+from ⇔-refl = \x -> x
+
+⇔-sym : ∀ {A B : Set} →
+  A ⇔ B               →
+  -----
+  B ⇔ A
+to (⇔-sym A⇔B) = from A⇔B
+from (⇔-sym A⇔B) = to A⇔B
+
+⇔-trans : ∀ {A B C : Set} →
+  A ⇔ B                   →
+  B ⇔ C                   →
+  -----
+  A ⇔ C
+to (⇔-trans A⇔B B⇔C) = to B⇔C ∘ to A⇔B
+from (⇔-trans A⇔B B⇔C) = from A⇔B ∘ from B⇔C
