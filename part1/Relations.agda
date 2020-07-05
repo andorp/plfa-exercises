@@ -1,4 +1,4 @@
-module plfa.part1.Relations where
+module plfa-exercises.part1.Relations where
 
 import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; cong)
@@ -161,7 +161,7 @@ data _<_ : ℕ → ℕ → Set where
 <-trans z<s       (s<s n<p) = z<s
 <-trans (s<s m<n) (s<s n<p) = s<s (<-trans m<n n<p)
 
-
+-- TODO: Rename
 data Triconomy (m n : ℕ) : Set where
 
   tri-left :
